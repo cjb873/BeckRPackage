@@ -1,60 +1,143 @@
 #include "kmeans.h"
-#include <eigen3/Eigen/Dense>
-#include <stdlib.h>
+#include <vector>
+#include <math.h>
 #include <time.h>
-#include <iostream>
 
+using namespace std;
 
-bool already_selected(int randAssn[], int val, int i){
+void initializeMatrix(matrix *matrix, const int nRow, const int nCol, const double* data) {
 
-  for(int j = 0; j < i; j++) {
+  matrix->nRow = nRow;
+  matrix->nCol = nCol;
 
-    if(val == randAssn[j]) return true;
+  for(int row = 0; row < nRow; row++) {
+    for(int col = 0; col < nCol; col++) {
+
+      matrix->matrix[row][col] = data[row+col];
+    }
+  }
+
+}
+
+vector<double> getAbsDiffVec(const vector<double> one, const vector<double> two) {
+
+  vector<double> returnVec(one.size());
+
+  for(int index = 0; index < one.size(); index++) {
+    returnVec[index] = fabs(one[index] - two[index]);
+  }
+
+  return returnVec;
+}
+
+double getDotProduct(const vector<double> one, const vector<double> two) {
+
+  double sum = 0;
+
+  for(int index = 0; index < one.size(); index++) {
+    sum += one[index] * two[index];
+  }
+
+  return sum;
+
+}
+
+bool alreadySelected(const int randAssn[], const int val, const int selIndex) {
+
+  for(int index = 0; index < selIndex; index++) {
+
+    if(val == randAssn[index]) return true;
   }
   return false;
 
 }
 
-double calc_distance(Eigen::VectorXd one, Eigen::VectorXd two)
-  {
+double calcDistance(const vector<double> one, const vector<double> two) {
 
-  Eigen::VectorXd diff_vec = one - two;
-  diff_vec = diff_vec.cwiseAbs();
-  return diff_vec.dot(diff_vec);
+  vector<double> diffVec = getAbsDiffVec(one, two);
+  return getDotProduct(diffVec, diffVec);
 
   }
 
+void setRow(matrix *one, const vector<double> rowVec, const int row) {
+
+  for(int col = 0; col < one->matrix[row].size(); col++) {
+    one->matrix[row][col] = rowVec[col];
+  }
+}
+
+void addRows(matrix *one, const matrix *two, const int row) {
+
+  for(int col = 0; col < one->matrix[row].size(); col++) {
+    one->matrix[row][col] += two->matrix[row][col];
+  }
+}
+
+void setZero(matrix *matrix, const int row) {
+  for(int col = 0; col < matrix->matrix[row].size(); col++) {
+    matrix->matrix[row][col] = 0;
+  }
+}
+
+void divideRow(matrix *matrix, const vector<int> counts, const int row){
+  for(int col = 0; col < matrix->matrix[row].size(); col++) {
+    matrix->matrix[row][col] /= counts[col];
+  }
+}
+
+int findMinimum(const vector<double> inVec) {
+  int minIndex = 0;
+
+  for(int index = 0; index < inVec.size(); index++) {
+    if(inVec[index] < inVec[minIndex]) minIndex = index;
+  }
+
+  return minIndex;
+}
+
 int kmeans(
   const int K,
-  double *in_data, // n_observations x n_features,
-  const int n_observations,
-  const int n_features,
-  int *cluster_assignments // n_observations
+  double *inData, // n_observations x n_features,
+  const int nObservations,
+  const int nFeatures,
+  int *clusterAssignments // n_observations
 ) {
 
-  if(K > n_observations) return K_TOO_LARGE;
-  else if(in_data == NULL) return NULL_DATA_MAT;
+  if(K > nObservations) return K_TOO_LARGE;
+  else if(inData == NULL) return NULL_DATA_MAT;
 
+  matrix dataMatrix;
 
-  Eigen::Map<Eigen::MatrixXd> data_matrix(in_data, n_observations, n_features);
-  Eigen::MatrixXd cluster_centers(K, n_features);
+  matrix clusterCenters;
+
+  initializeMatrix(&dataMatrix, nObservations, nFeatures, inData);
+
+  double zeros[K * nFeatures];
+
+  for(int index = 0; index < K * nFeatures; index++) {
+    zeros[index] = 0;
+  }
+
+  initializeMatrix(&clusterCenters, K, nFeatures, zeros);
+
 
   // initialize cluster centers
   srand(time(NULL));
   int randAssn[K];
 
 
-  for(int i = 0; i < K; i++) {
+  for(int index = 0; index < K; index++) {
 
-    int val = rand() % n_observations;
+    int val = rand() % nObservations;
 
-    while(already_selected(randAssn, val, i)) {
-      val = rand() % n_observations;
+    while(alreadySelected(randAssn, val, index)) {
+      val = rand() % nObservations;
     }
 
-    randAssn[i] = val;
+    randAssn[index] = val;
 
-    cluster_centers.row(i) = data_matrix.row(randAssn[i]);
+
+    setRow(&clusterCenters, dataMatrix.matrix[randAssn[index]], index);
   }
 
   // make assignments and recompute means
@@ -62,20 +145,20 @@ int kmeans(
   while(changes > 0) {
     changes = 0;
     // make assignments
-    for(int i = 0; i < n_observations; i++) {
+    for(int row = 0; row < nObservations; row++) {
 
-      Eigen::VectorXd distances(K);
+      vector<double> distances(K);
 
-      for(int j = 0; j < K; j++) {
-        distances[j] = calc_distance(data_matrix.row(i), cluster_centers.row(j));
+      for(int col = 0; col < K; col++) {
+        distances[col] = calcDistance(dataMatrix.matrix[row], clusterCenters.matrix[row]);
       }
 
-      int min_index;
-      distances.minCoeff(&min_index);
-      int former_assignment = cluster_assignments[i];
-      cluster_assignments[i] = min_index;
+      int minIndex = findMinimum(distances);
 
-      if(former_assignment != min_index) {
+      int formerAssignment = clusterAssignments[row];
+      clusterAssignments[row] = minIndex;
+
+      if(formerAssignment != minIndex) {
         changes++;
       }
     }
@@ -83,22 +166,22 @@ int kmeans(
 
 
     // recompute means
-    for(int i = 0; i < K; i++) {
-      cluster_centers.row(i).setZero();
+    for(int row = 0; row < K; row++) {
+      setZero(&clusterCenters, row);
 
     }
 
-    Eigen::VectorXd cluster_counts(K);
+    vector<int> clusterCounts(K, 0);
 
-    for(int i = 0; i < n_observations; i++) {
-      int cluster = cluster_assignments[i];
-      cluster_centers.row(cluster) += data_matrix.row(i);
-      cluster_counts[cluster] += 1;
+    for(int row = 0; row < nObservations; row++) {
+      int cluster = clusterAssignments[row];
+      addRows(&clusterCenters, &dataMatrix, row);
+      clusterCounts[cluster] += 1;
 
     }
 
-    for(int i = 0; i < K; i++) {
-       cluster_centers.row(i) = cluster_centers.row(i) / cluster_counts[i];
+    for(int row = 0; row < K; row++) {
+      divideRow(&clusterCenters, clusterCounts, row);
     }
   }
   return 0;
