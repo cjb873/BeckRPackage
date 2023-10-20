@@ -32,7 +32,7 @@ int kmeans(
   int *cluster_assignments // n_observations
 ) {
 
-  if(K > n_features) return K_TOO_LARGE;
+  if(K > n_observations) return K_TOO_LARGE;
   else if(in_data == NULL) return NULL_DATA_MAT;
 
 

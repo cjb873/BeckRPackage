@@ -1,0 +1,111 @@
+* using log directory ‘/Users/codybeck/Desktop/Fall '23/CS599/BeckRPackage/..Rcheck’
+* using R version 4.3.1 (2023-06-16)
+* using platform: x86_64-apple-darwin20 (64-bit)
+* R was compiled by
+    Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+    GNU Fortran (GCC) 12.2.0
+* running under: macOS Ventura 13.5.2
+* using session charset: UTF-8
+* checking for file ‘./DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘BeckRPackage’ version ‘1.0’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... WARNING
+Subdirectory ‘BeckRPackage/src’ contains apparent object files/libraries
+  BeckRPackage.so RcppExports.o interface.o kmeans.o
+Object files/libraries should not be included in a source package.
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  .gitignore
+  R/.HCLUST.R.swp
+  ..Rcheck
+  .git
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘BeckRPackage’ can be installed ... OK
+* used C++ compiler: ‘Apple clang version 14.0.3 (clang-1403.0.22.14.1)’
+* used SDK: ‘MacOSX13.3.sdk’
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... NOTE
+Malformed Description field: should contain one or more complete sentences.
+License components which are templates and need '+ file LICENSE':
+  MIT
+Checking should be performed on sources prepared by ‘R CMD build’.
+* checking top-level files ... NOTE
+File
+  LICENSE
+is not mentioned in the DESCRIPTION file.
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... WARNING
+Found the following directory with the name of a check directory:
+  ./..Rcheck
+Most likely, these were included erroneously.
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking dependencies in R code ... WARNING
+'library' or 'require' call not declared from: ‘data.table’
+'library' or 'require' call to ‘data.table’ in package code.
+  Please use :: or requireNamespace() instead.
+  See section 'Suggested packages' in the 'Writing R Extensions' manual.
+Namespace in Imports field not imported from: ‘data.table’
+  All declared Imports should be used.
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+HCLUST: no visible global function definition for ‘data.table’
+HCLUST: no visible global function definition for ‘rbindlist’
+Undefined global functions or variables:
+  data.table rbindlist
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... WARNING
+Codoc mismatches from documentation object 'kmeans_interface':
+kmeans_interface
+  Code: function(K, data_mat)
+  Docs: function(n.clusters, data.matrix)
+  Argument names in code not in docs:
+    K data_mat
+  Argument names in docs not in code:
+    n.clusters data.matrix
+  Mismatches in argument names:
+    Position: 1 Code: K Docs: n.clusters
+    Position: 2 Code: data_mat Docs: data.matrix
+
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking line endings in C/C++/Fortran sources/headers ... OK
+* checking compiled code ... NOTE
+File ‘BeckRPackage/libs/BeckRPackage.so’:
+  Found ‘_rand’, possibly from ‘rand’ (C)
+    Object: ‘kmeans.o’
+  Found ‘_srand’, possibly from ‘srand’ (C)
+    Object: ‘kmeans.o’
+
+Compiled code should not call entry points which might terminate R nor
+write to stdout/stderr instead of to the console, nor use Fortran I/O
+nor system RNGs nor [v]sprintf.
+
+See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.
+* checking examples ... OK
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ... OK
+  Running ‘testthat.R’
+* checking PDF version of manual ... OK
+* DONE
+Status: 4 WARNINGs, 5 NOTEs
