@@ -1,5 +1,6 @@
 ..Rcheck
 *.so
+*.rds
 *.o
 *.swp
 
