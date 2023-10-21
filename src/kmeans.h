@@ -9,13 +9,6 @@ typedef enum {
   K_TOO_LARGE,
 } ErrorCodes;
 
-typedef struct matrixStruct {
-  int nCol;
-  int nRow;
-  vector<vector<double>> matrix;
-  } matrix;
-
-
 void initializeMatrix(vector<vector<double>> *matrix, const int nRow, const int nCol, const double* data);
 vector<double> getAbsDiffVec(const vector<double> one, const vector<double> two);
 double getDotProduct(const vector<double> one, const vector<double> two);
