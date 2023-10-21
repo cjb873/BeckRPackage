@@ -16,15 +16,15 @@ typedef struct matrixStruct {
   } matrix;
 
 
-void initializeMatrix(matrix *matrix, const int nRow, const int nCol, const double* data);
+void initializeMatrix(vector<vector<double>> *matrix, const int nRow, const int nCol, const double* data);
 vector<double> getAbsDiffVec(const vector<double> one, const vector<double> two);
 double getDotProduct(const vector<double> one, const vector<double> two);
 bool alreadySelected(const int randAssn[], const int val, const int selIndex);
 double calcDistance(const vector<double> one, const vector<double> two);
-void setRow(matrix *one, const vector<double> rowVec, const int row);
-void addRows(matrix *one, const matrix *two, const int row);
-void setZero(matrix *matrix, const int row);
-void divideRow(matrix *matrix, const vector<int> counts, const int row);
+void setRow(vector<double> *row, const vector<double> inVec);
+vector<double> addRows(vector<double> one, const vector<double> two);
+void setZero(vector<double> *row);
+void divideRow(vector<double> *row, const int count);
 int findMinimum(const vector<double> inVec);
 bool already_selected(int randAssn[], int val, int i);
 

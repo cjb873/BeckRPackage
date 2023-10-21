@@ -2,20 +2,28 @@
 #include <vector>
 #include <math.h>
 #include <time.h>
-
+#include <iostream>
 using namespace std;
 
-void initializeMatrix(matrix *matrix, const int nRow, const int nCol, const double* data) {
+void initializeMatrix(vector<vector <double>> *matrix, const int nRow, const int nCol, const double* data) {
+  double tempData[nRow * nCol];
 
-  matrix->nRow = nRow;
-  matrix->nCol = nCol;
-
-  for(int row = 0; row < nRow; row++) {
-    for(int col = 0; col < nCol; col++) {
-
-      matrix->matrix[row][col] = data[row+col];
+  for(int index = 0; index < nRow * nCol; index++) {
+    if(index % 2 == 0) {
+      tempData[index] = data[index / 2];
+    }
+    else {
+      tempData[index] = data[(index - 1) / 2 + nRow];
     }
   }
+  for(int row = 0; row < nRow; row++) {
+    vector<double> v;
+    for(int col = 0; col < nCol; col++) {
+      v.push_back(tempData[(row * nCol)+col]);
+    }
+    matrix->push_back(v);
+  }
+
 
 }
 
@@ -35,7 +43,7 @@ double getDotProduct(const vector<double> one, const vector<double> two) {
   double sum = 0;
 
   for(int index = 0; index < one.size(); index++) {
-    sum += one[index] * two[index];
+    sum += (one[index] * one[index]);
   }
 
   return sum;
@@ -59,29 +67,31 @@ double calcDistance(const vector<double> one, const vector<double> two) {
 
   }
 
-void setRow(matrix *one, const vector<double> rowVec, const int row) {
+void setRow(vector<double> *row, const vector<double> inVec) {
 
-  for(int col = 0; col < one->matrix[row].size(); col++) {
-    one->matrix[row][col] = rowVec[col];
+  for(int col = 0; col < (*row).size(); col++) {
+    (*row)[col] = inVec[col];
   }
 }
 
-void addRows(matrix *one, const matrix *two, const int row) {
+vector<double> addRows(vector<double> one, vector<double> two) {
+  vector<double> returnVec(one.size());
 
-  for(int col = 0; col < one->matrix[row].size(); col++) {
-    one->matrix[row][col] += two->matrix[row][col];
+  for(int col = 0; col < one.size(); col++) {
+    returnVec[col] = one[col] + two[col];
+  }
+  return returnVec;
+}
+
+void setZero(vector<double> *row) {
+  for(int col = 0; col < (*row).size(); col++) {
+    (*row)[col] = 0;
   }
 }
 
-void setZero(matrix *matrix, const int row) {
-  for(int col = 0; col < matrix->matrix[row].size(); col++) {
-    matrix->matrix[row][col] = 0;
-  }
-}
-
-void divideRow(matrix *matrix, const vector<int> counts, const int row){
-  for(int col = 0; col < matrix->matrix[row].size(); col++) {
-    matrix->matrix[row][col] /= counts[col];
+void divideRow(vector<double> *row, const int count){
+  for(int col = 0; col < (*row).size(); col++) {
+    (*row)[col] = (*row)[col] / count;
   }
 }
 
@@ -106,9 +116,10 @@ int kmeans(
   if(K > nObservations) return K_TOO_LARGE;
   else if(inData == NULL) return NULL_DATA_MAT;
 
-  matrix dataMatrix;
+  cout << endl;
+  vector<vector<double>> dataMatrix;
 
-  matrix clusterCenters;
+  vector<vector<double>> clusterCenters;
 
   initializeMatrix(&dataMatrix, nObservations, nFeatures, inData);
 
@@ -137,20 +148,22 @@ int kmeans(
     randAssn[index] = val;
 
 
-    setRow(&clusterCenters, dataMatrix.matrix[randAssn[index]], index);
+    setRow(&clusterCenters[index], dataMatrix[randAssn[index]]);
   }
+
 
   // make assignments and recompute means
   int changes = 1;
   while(changes > 0) {
+
     changes = 0;
     // make assignments
     for(int row = 0; row < nObservations; row++) {
 
       vector<double> distances(K);
 
-      for(int col = 0; col < K; col++) {
-        distances[col] = calcDistance(dataMatrix.matrix[row], clusterCenters.matrix[row]);
+      for(int cluster = 0; cluster < K; cluster++) {
+        distances[cluster] = calcDistance(dataMatrix[row], clusterCenters[cluster]);
       }
 
       int minIndex = findMinimum(distances);
@@ -163,26 +176,32 @@ int kmeans(
       }
     }
 
-
+    vector<int> clusterCounts(K);
 
     // recompute means
     for(int row = 0; row < K; row++) {
-      setZero(&clusterCenters, row);
-
+      setZero(&clusterCenters[row]);
+      clusterCounts[row] = 0;
     }
 
-    vector<int> clusterCounts(K, 0);
+
+
 
     for(int row = 0; row < nObservations; row++) {
       int cluster = clusterAssignments[row];
-      addRows(&clusterCenters, &dataMatrix, row);
+
+      clusterCenters[cluster] = addRows(clusterCenters[cluster], dataMatrix[row]);
       clusterCounts[cluster] += 1;
 
     }
 
+
+
     for(int row = 0; row < K; row++) {
-      divideRow(&clusterCenters, clusterCounts, row);
+      divideRow(&clusterCenters[row], clusterCounts[row]);
     }
+
+
   }
   return 0;
 }
