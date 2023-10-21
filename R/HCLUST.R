@@ -1,6 +1,6 @@
 
 HCLUST <- function(data.mat, n.clusters){                                          
-  library(data.table)
+  
   n.rows <- nrow(data.mat)                                                         
   n.features <- ncol(data.mat)                                                     
   my.dist.mat <- matrix(NA, n.rows, n.rows)                                        
@@ -15,7 +15,7 @@ HCLUST <- function(data.mat, n.clusters){
   while(length(unique(cluster.id.list)) - 1 > n.clusters){                         
     # unique from ?which, ?match and ?unique
     
-    to.join.dt <- data.table(                                                      
+    to.join.dt <- data.table::data.table(                                                      
       row=as.integer(row(my.dist.mat)),                                            
       col=as.integer(col(my.dist.mat)),                                            
       dist=as.numeric(my.dist.mat))
@@ -23,12 +23,12 @@ HCLUST <- function(data.mat, n.clusters){
     list.of.possible <- list()
     for(data.i in 1:nrow(to.join.dt)){
       if(to.join.dt[data.i,]$row < to.join.dt[data.i,]$col) { 
-        list.of.possible[[data.i]] <- data.table(to.join.dt[data.i,])
+        list.of.possible[[data.i]] <- data.table::data.table(to.join.dt[data.i,])
       }
 
     }
     
-    to.join.dt <- rbindlist(list.of.possible)
+    to.join.dt <- data.table::rbindlist(list.of.possible)
     to.join.dt <- to.join.dt[which.min(to.join.dt$dist),]
     to.update <- to.join.dt$row                                                    
     to.delete <- to.join.dt$col                                                    

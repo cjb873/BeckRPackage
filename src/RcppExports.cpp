@@ -11,14 +11,14 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // kmeans_interface
-Rcpp::IntegerVector kmeans_interface(Rcpp::IntegerVector K, Rcpp::NumericMatrix data_mat);
-RcppExport SEXP _BeckRPackage_kmeans_interface(SEXP KSEXP, SEXP data_matSEXP) {
+Rcpp::IntegerVector kmeans_interface(Rcpp::IntegerVector K, Rcpp::NumericMatrix data_matrix);
+RcppExport SEXP _BeckRPackage_kmeans_interface(SEXP KSEXP, SEXP data_matrixSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type K(KSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type data_mat(data_matSEXP);
-    rcpp_result_gen = Rcpp::wrap(kmeans_interface(K, data_mat));
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type data_matrix(data_matrixSEXP);
+    rcpp_result_gen = Rcpp::wrap(kmeans_interface(K, data_matrix));
     return rcpp_result_gen;
 END_RCPP
 }

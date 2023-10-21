@@ -7,14 +7,14 @@
 // [[Rcpp::export]]
 Rcpp::IntegerVector kmeans_interface(
   Rcpp::IntegerVector K,
-  Rcpp::NumericMatrix data_mat // n_observations x n_features,
+  Rcpp::NumericMatrix data_matrix // n_observations x n_features,
 ){
 
-  int n_observations = data_mat.nrow();
-  int n_features = data_mat.ncol();
+  int n_observations = data_matrix.nrow();
+  int n_features = data_matrix.ncol();
   int clusters[n_observations];
 
-  int status_code = kmeans(K[0], &data_mat[0],
+  int status_code = kmeans(K[0], &data_matrix[0],
                            n_observations, n_features, clusters);
 
   if(status_code == K_TOO_LARGE) {
