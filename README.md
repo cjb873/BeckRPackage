@@ -9,9 +9,7 @@ This package implements two R functions, `kmeans_interface` and `HCLUST`. The fu
 The function `HCLUST` is written natively in R.
 
 ### Dependencies
-To ensure that this package will correctly build, you will need to install the [Rcpp](https://www.rcpp.org/) package in R. Additionally, you will need the 
-[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) C++ library. 
-
+To ensure that this package will correctly build, you will need to install the [Rcpp](https://www.rcpp.org/) package in R.
 ### Building
 To build the library, run the command `R CMD INSTALL <path_to_package>`.
 
