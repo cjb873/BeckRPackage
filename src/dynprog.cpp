@@ -17,8 +17,9 @@ Eigen::VectorXd cumsum(Eigen::VectorXd inData, const int nObservations) {
     returnVec[0] = 0;
 
     for(int i = 1; i <= nObservations; i++)
-        returnVec[i] = inData(Eigen::seq(0, i-1)).sum();
-
+        {
+        returnVec[i] = slice(inData, 0, i).sum();
+        }
     return returnVec;
 
 }
