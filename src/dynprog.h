@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 typedef enum {
   NULL_DATA_VEC = 1,
