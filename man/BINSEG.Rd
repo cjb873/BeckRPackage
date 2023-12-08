@@ -18,20 +18,8 @@ BINSEG(K, data.vec)
 }                                                                                                                  
                                                                                                                    
 \examples{                                                                                                         
-# Pull in data table                                                               
-library(data.table)                                                                
-                                                                                   
-# Get the data                                                                     
-data(neuroblastoma, package="neuroblastoma")                                       
-                                                                                   
-# Store as a data table                                                            
-nb.dt <- data.table(neuroblastoma$profiles)                                        
-                                                                                   
-# Select a single profile                                                          
-one.profile <- nb.dt[profile.id == 4 & chromosome == "2"]                          
-                                                                                   
-# Select one series of logratio values                                             
-data.vec <- one.profile$logratio                                                   
+# Select data                                              
+data.vec <- as.matrix(iris[3])[,1]                                                   
                                                                                    
 # Pull in the package                                                              
 require("BeckRPackage")                                                            
