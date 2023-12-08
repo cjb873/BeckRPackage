@@ -8,8 +8,8 @@ Maintainer: Cody Beck <cjb873@nau.edu>
 Description: We do unsupervised learning
 URL: https://github.com/cjb873/BeckRPackage
 License: MIT
-Imports: data.table, Rcpp (>= 1.0.11)
-LinkingTo: Rcpp
+Imports: data.table, Rcpp (>= 1.0.11), RcppEigen
+LinkingTo: Rcpp, RcppEigen
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
 BugReports: https://github.com/cjb873/BeckRPackage/issues

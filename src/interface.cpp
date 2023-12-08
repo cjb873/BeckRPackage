@@ -1,7 +1,10 @@
+#include "dynprog.h"
 #include "kmeans.h"
-#include <Rcpp.h>
 #include <stdlib.h>
 #include <iostream>
+#include <Rcpp.h>
+#include <RcppEigen.h>
+
 
 
 // [[Rcpp::export]]
@@ -39,4 +42,28 @@ Rcpp::IntegerVector kmeans_interface(
   return outVec;
 
 
+}
+
+// [[Rcpp::depends(RcppEigen)]]
+// [[Rcpp::export]]
+Eigen::MatrixXd dynprog_interface(
+  Rcpp::IntegerVector K,
+  Eigen::VectorXd data_vec // n observations
+){
+
+  int n_observations = data_vec.size();
+  Eigen::MatrixXd outMat(K[0], n_observations);
+
+  int status_code = dynprog(K[0], &data_vec, n_observations, &outMat);
+
+  if(status_code == DATA_TOO_SMALL) {
+    Rcpp::stop("K should be less than or equal to the number of observations.");
+
+  }
+
+  else if(status_code == NULL_DATA_VEC) {
+    Rcpp::stop("The data vector should have data in it.");
+
+  }
+  return outMat;
 }

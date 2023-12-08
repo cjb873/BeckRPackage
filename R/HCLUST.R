@@ -1,4 +1,3 @@
-
 HCLUST <- function(data.mat, n.clusters){                                          
   
   n.rows <- nrow(data.mat)                                                         

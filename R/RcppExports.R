@@ -5,3 +5,7 @@ kmeans_interface <- function(K, data_matrix) {
     .Call(`_BeckRPackage_kmeans_interface`, K, data_matrix)
 }
 
+dynprog_interface <- function(K, data_vec) {
+    .Call(`_BeckRPackage_dynprog_interface`, K, data_vec)
+}
+
